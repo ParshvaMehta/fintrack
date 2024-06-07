@@ -1,0 +1,23 @@
+version: '3.8'  
+services:
+  fintrack-db:
+    image: mysql:8.0 
+    container_name: fintrack-db
+    env_file:
+      - "../.env"
+    ports:
+      - "3306:3306"
+    volumes:
+      - fintrack-db-data:/var/lib/mysql  # Persistent storage for data
+
+  fintrack-adminer:
+    image: adminer
+    container_name: fintrack-adminer
+    restart: on-failure
+    environment:
+      ADMINER_DEFAULT_SERVER: fintrack-db
+    ports:
+      - 8080:8080
+    
+volumes:
+  fintrack-db-data:
