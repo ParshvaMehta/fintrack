@@ -1,15 +1,8 @@
 import { errorHandler, successHandler } from "@/lib/response_handler";
 import { verifyTokenSchema } from "./token_schema";
 import prisma from "@/lib/prisma";
-
-const deleteTokenById = async (id: number) => {
-	// delete token
-	return await prisma.token.delete({
-		where: {
-			id,
-		},
-	});
-};
+import { updateSingleUserById } from "@/services/users/users";
+import { deleteTokenById } from "@/services/token/tokens";
 
 export async function POST(request: Request) {
 	try {
@@ -33,16 +26,12 @@ export async function POST(request: Request) {
 		}
 
 		// Update user status
-		const user = await prisma.user.update({
-			where: {
-				id: user_id,
-			},
-			data: {
-				email_verified: true,
-				email_verified_at: new Date(),
-				is_active: true,
-			},
+		const user = await updateSingleUserById(user_id, {
+			email_verified: true,
+			email_verified_at: new Date(),
+			is_active: true,
 		});
+
 		// delete token
 		await deleteTokenById(userToken?.id);
 		return successHandler(user, "User verified", 200);
