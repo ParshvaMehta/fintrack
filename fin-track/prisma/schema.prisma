@@ -49,7 +49,7 @@ model Token {
 
 // Email Template 
 enum EmailTemplateType {
-  EMAIL_VERIFICATION
+  EMAIL_VERIFICATION,
 }
 
 model EmailTemplate {
