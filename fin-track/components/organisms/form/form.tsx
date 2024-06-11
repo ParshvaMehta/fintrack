@@ -12,6 +12,7 @@ interface FormFieldConfig {
 interface FormProps {
 	fields: FormFieldConfig[];
 	onSubmit: (data: Record<string, string>) => void;
+	disable?: boolean;
 }
 
 type ActionType = { type: "UPDATE_FIELD"; name: string; value: string };
@@ -28,7 +29,7 @@ const formReducer = (state: Record<string, string>, action: ActionType) => {
 	}
 };
 
-const Form: React.FC<FormProps> = ({ fields, onSubmit }) => {
+const Form: React.FC<FormProps> = ({ fields, onSubmit, disable }) => {
 	const initialState = fields.reduce((acc, field) => {
 		acc[field.name] = "";
 		return acc;
@@ -67,6 +68,7 @@ const Form: React.FC<FormProps> = ({ fields, onSubmit }) => {
 				/>
 			))}
 			<button
+				disabled={disable}
 				type="submit"
 				className="w-full bg-light-primary dark:bg-dark-primary text-white py-2 rounded-md hover:bg-light-secondary dark:hover:bg-dark-secondary transition duration-300"
 			>

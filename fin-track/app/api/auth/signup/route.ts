@@ -4,6 +4,7 @@ import { generateOTP } from "@/lib/utils";
 import fs from "fs";
 import { signupSchema } from "./signup_schema";
 import { successHandler, errorHandler } from "@/lib/response_handler";
+import { createUser } from "@/services/users/users";
 
 export async function POST(request: Request) {
 	try {
@@ -19,13 +20,7 @@ export async function POST(request: Request) {
 		}
 
 		// Create User
-		const user = await prisma.user.create({
-			data: {
-				email,
-				password,
-				name,
-			},
-		});
+		const user = await createUser(email, password, name);
 		// Generate OTP
 		const OTP = generateOTP();
 		// expires after 7 days

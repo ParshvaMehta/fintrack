@@ -39,10 +39,10 @@ const httpService = {
 	get: async <T = any>(
 		url: string,
 		config?: AxiosRequestConfig
-	): Promise<AxiosResponse<T>> => {
+	): Promise<T> => {
 		try {
 			const response = await axiosInstance.get<T>(url, config);
-			return response;
+			return response.data;
 		} catch (error) {
 			throw error;
 		}
@@ -51,10 +51,10 @@ const httpService = {
 		url: string,
 		data?: any,
 		config?: AxiosRequestConfig
-	): Promise<AxiosResponse<T>> => {
+	): Promise<T> => {
 		try {
 			const response = await axiosInstance.post<T>(url, data, config);
-			return response;
+			return response.data;
 		} catch (error) {
 			console.error("Error in post request", error);
 			throw error;
@@ -64,10 +64,10 @@ const httpService = {
 		url: string,
 		data?: any,
 		config?: AxiosRequestConfig
-	): Promise<AxiosResponse<T>> => {
+	): Promise<T> => {
 		try {
 			const response = await axiosInstance.put<T>(url, data, config);
-			return response;
+			return response.data;
 		} catch (error) {
 			throw error;
 		}
@@ -76,10 +76,10 @@ const httpService = {
 		url: string,
 		data?: any,
 		config?: AxiosRequestConfig
-	): Promise<AxiosResponse<T>> => {
+	): Promise<T> => {
 		try {
 			const response = await axiosInstance.patch<T>(url, data, config);
-			return response;
+			return response.data;
 		} catch (error) {
 			throw error;
 		}
@@ -87,10 +87,10 @@ const httpService = {
 	delete: async <T = any>(
 		url: string,
 		config?: AxiosRequestConfig
-	): Promise<AxiosResponse<T>> => {
+	): Promise<T> => {
 		try {
 			const response = await axiosInstance.delete<T>(url, config);
-			return response;
+			return response.data;
 		} catch (error) {
 			throw error;
 		}

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-
+import { FaMoon, FaSun } from "react-icons/fa";
 const ThemeToggle = () => {
 	const [theme, setTheme] = useState(
 		typeof window !== "undefined" && localStorage.getItem("theme") === "dark"
@@ -21,10 +21,10 @@ const ThemeToggle = () => {
 
 	return (
 		<button
-			onClick={toggleTheme}
-			className="p-2 rounded-md bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-dark-text"
+			onClick={() => toggleTheme()}
+			className="p-2 rounded-md text-gray-700 dark:text-dark-text"
 		>
-			Toggle Theme
+			<>{theme === "dark" ? <FaSun /> : <FaMoon />}</>
 		</button>
 	);
 };

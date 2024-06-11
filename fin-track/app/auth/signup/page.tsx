@@ -1,9 +1,15 @@
 "use client";
 import Form from "@/components/organisms/form/form";
-import { API_URL } from "@/lib/constant";
+import { API_URL, APP_ROUTE } from "@/lib/constant";
 import httpService from "@/lib/http";
+import { signUpPayload, signUpResponse } from "@/types/auth";
+import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "react-toastify";
-const Signup = () => {
+const SignUp = () => {
+	const router = useRouter();
+	const [disable, setDisable] = useState(false);
 	const formFields = [
 		{
 			id: "name",
@@ -34,35 +40,57 @@ const Signup = () => {
 			required: true,
 		},
 	];
-	const notify = () => toast("Wow so easy!");
-
-	const handleSignupSubmit = async (data: Record<string, string>) => {
-		console.log("Form Data:", data);
+	const handleSignUpSubmit = async (data: signUpPayload) => {
+		setDisable(true);
 		if (data.password !== data.confirmPassword) {
-			// setError("Passwords do not match");
+			toast.error("Password not matched!");
+			setDisable(false);
 			return;
 		}
 		try {
-			const response = await httpService.post(API_URL.AUTH.SIGNUP, data);
-			console.log("Signup response:", response);
-			// setSuccess(
-			// 	"Signup successful! Please check your email for verification."
-			// );
-			// setError("");
+			const { data: response } = (await httpService.post(
+				API_URL.AUTH.SIGNUP,
+				data
+			)) as unknown as signUpResponse;
+			console.error(response, "response");
+			toast.success("User created!");
+			setDisable(false);
+			router.push(
+				`${APP_ROUTE.AUTH.VERIFY_TOKEN}?email=${encodeURIComponent(
+					response.email
+				)}&userId=${response.id}`
+			);
 		} catch (error) {
-			// setError("Signup failed. Please try again.");
-			// setSuccess("");
+			if (error instanceof AxiosError) {
+				let errMsg = error?.message;
+				if (error.response?.data.message) {
+					errMsg = error.response?.data.message;
+				}
+				toast.error(errMsg);
+				setDisable(false);
+				return;
+			}
+			console.error(error);
+			toast.error("Not able to create user!");
+			setDisable(false);
+			return;
+		} finally {
+			setDisable(false);
 		}
-
-		// Handle form submission here, e.g., by making an API call
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text">
-			<Form fields={formFields} onSubmit={handleSignupSubmit} />
-			<button onClick={notify}>Notify!</button>
+		<div className="min-h-screen flex items-center justify-center bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text flex-col">
+			<h2 className="text-2xl font-bold mb-4">Sign Up</h2>
+			<Form
+				fields={formFields}
+				onSubmit={(payload) =>
+					handleSignUpSubmit(payload as unknown as signUpPayload)
+				}
+				disable={disable}
+			/>
 		</div>
 	);
 };
 
-export default Signup;
+export default SignUp;

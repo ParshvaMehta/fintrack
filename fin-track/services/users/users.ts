@@ -18,8 +18,11 @@ export const updateSingleUserById = async (user_id: number, data: any) => {
 	return user;
 };
 
-export const getUserByEmailPassword = (email: string, password: string) => {
-	const user = prisma.user.findFirst({
+export const getUserByEmailPassword = async (
+	email: string,
+	password: string
+) => {
+	const user = await prisma.user.findFirst({
 		select: {
 			id: true,
 			email: true,
@@ -32,5 +35,28 @@ export const getUserByEmailPassword = (email: string, password: string) => {
 			password,
 		},
 	});
+	return user;
+};
+
+export const createUser = async (
+	email: string,
+	password: string,
+	name: string
+) => {
+	const user = await prisma.user.create({
+		data: {
+			email,
+			password,
+			name,
+		},
+		select: {
+			id: true,
+			email: true,
+			email_verified: true,
+			is_active: true,
+			name: true,
+		},
+	});
+
 	return user;
 };
