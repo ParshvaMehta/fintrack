@@ -1,12 +1,12 @@
 class StorageService {
 	// Set item in local storage
 	setItem(key: string, value: string): void {
-		localStorage.setItem(key, value);
+		window.localStorage.setItem(key, value);
 	}
 
 	// Get item from local storage
 	getItem(key: string): string | null {
-		return localStorage.getItem(key);
+		return window.localStorage.getItem(key);
 	}
 
 	// Remove item from local storage

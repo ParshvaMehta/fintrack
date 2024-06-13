@@ -1,7 +1,7 @@
 "use client";
 import Form from "@/components/organisms/form/form";
 import { API_URL, APP_ROUTE } from "@/lib/constant";
-import httpService from "@/lib/http";
+import httpService from "@/lib/client/http";
 import { signUpPayload, signUpResponse } from "@/types/auth";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";

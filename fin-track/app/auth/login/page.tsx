@@ -2,13 +2,14 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import httpService from "@/lib/http";
-import storageService from "@/lib/storage";
+import httpService from "@/lib/client/http";
+import storageService from "@/lib/client/storage";
 import { API_URL } from "@/lib/constant";
 import Form from "@/components/organisms/form/form";
 import { loginPayload } from "@/types/auth";
+import Cookies from "js-cookie";
 
 const Login: React.FC = () => {
 	const [disable, setDisable] = useState(false);
@@ -39,8 +40,9 @@ const Login: React.FC = () => {
 			}
 			storageService.setItem("user", JSON.stringify(response.data.user));
 			storageService.setItem("token", response.data.token);
+			Cookies.set("token", token, { expires: 7 });
 			toast.success("Login successful!");
-			router.push("/dashboard"); // Redirect to dashboard after successful login
+			router.push("/app/dashboard"); // Redirect to dashboard after successful login
 		} catch (err) {
 			toast.error("Login failed. Please check your email and password.");
 		}
